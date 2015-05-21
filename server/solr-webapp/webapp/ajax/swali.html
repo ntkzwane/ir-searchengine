@@ -1,0 +1,23 @@
+<html>
+  <head>
+  <title>Swali</title>
+    <script src="js/solr-comms.js" language="Javascript"></script>
+  </head>
+  <body>
+    <div style="width:100%; text-align:center">
+      <img src="resources/images/logo.png">
+    
+      <form name="f1" onsubmit='xmlhttpPost("/solr/swali_shard1_replica1/select"); return false;'>
+        <p>
+          <input name="query" type="text">
+          <br>  
+          <br>
+            <input value="Go" type="submit">
+        </p>
+        
+        <div id="result"></div>
+      </form>
+    </div>
+    <p/><pre>Raw JSON String: <div id="raw"></div></pre>
+  </body>
+</html>
