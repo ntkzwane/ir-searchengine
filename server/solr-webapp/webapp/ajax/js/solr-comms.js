@@ -20,7 +20,6 @@ function xmlhttpPost(strURL) {
     var strData = params.join('&');
     self.xmlHttpReq.send(strData);
 }
-
 function getstandardargs() {
     var params = [
         'wt=json'
@@ -40,14 +39,24 @@ function getquerystring() {
 
 // this function does all the work of parsing the solr response and updating the page.
 function updatepage(str){
+  var resp = eval("("+str+")");                         // use eval to parse Solr's JSON response
+    //printing the raw json data
   document.getElementById("raw").innerHTML = str;
-  var rsp = eval("("+str+")"); // use eval to parse Solr's JSON response
-  var html= "<br>numFound=" + rsp.response.numFound;
-  var first = rsp.response.docs[0];
-  html += "<br>product name="+ first.name;
-  console.log(rsp.response.og_url);
-  html += "<br>product id= "+"<a href="+rsp.response.og_url+">Some isht right</a>";
-  var hl=rsp.highlighting[first.id];
+  var html= "<br>Number of Results=" + resp.response.numFound;
+  document.getElementById("result").innerHTML = html;
+  var first = resp.response.docs[0];
+
+  // print all the results
+  for(var i = 0; i < resp.response.docs.length; i++){
+    var curdoc = resp.response.docs[i];
+    html += "<h4>"+curdoc.title+"</h4>";
+    html += curdoc.description+"<br>";
+    html += "<a href="+curdoc.og_url+">"+curdoc.og_url+"</a><br>";
+    html += "<br>";
+  } 
+  
+  // dunno what this highlighting shit is. stuff on bottom of page
+  var hl=resp.highlighting[first.id];
   if (hl.name != null) { html += "<br>name highlighted: " + hl.name[0]; }
   if (hl.features != null) { html += "<br>features highligted: " + hl.features[0]; }
   document.getElementById("result").innerHTML = html;
